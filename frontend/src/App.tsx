@@ -9,6 +9,14 @@ type LogEntry = {
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "http://localhost:8081";
 
+function getErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof TypeError) {
+    return `${fallback} Check that the Spring Boot API is running at ${API_BASE_URL}.`;
+  }
+
+  return error instanceof Error ? error.message : fallback;
+}
+
 function formatTimestamp(value: string) {
   const date = new Date(value);
 
@@ -52,7 +60,7 @@ function App() {
       const data = (await response.json()) as LogEntry[];
       setLogs(data);
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "Unable to load logs.");
+      setError(getErrorMessage(loadError, "Unable to load logs."));
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +94,7 @@ function App() {
       setLogs((currentLogs) => [createdLog, ...currentLogs]);
       setMessage("");
     } catch (createError) {
-      setError(createError instanceof Error ? createError.message : "Unable to create log.");
+      setError(getErrorMessage(createError, "Unable to create log."));
     } finally {
       setIsSubmitting(false);
     }
@@ -105,6 +113,7 @@ function App() {
           Submit a log message, store it in MongoDB through the Spring Boot API, and
           review the saved entries from one simple screen.
         </p>
+        <p className="api-target">API target: {API_BASE_URL}</p>
       </section>
 
       <section className="panel">

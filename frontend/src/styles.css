@@ -76,6 +76,18 @@ h1 {
   line-height: 1.6;
 }
 
+.api-target {
+  display: inline-block;
+  margin: 14px 0 0;
+  padding: 7px 10px;
+  border: 1px solid #dce3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #4f5f7a;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .panel {
   margin-top: 18px;
   padding: 22px;
