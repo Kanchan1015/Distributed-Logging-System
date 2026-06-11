@@ -2,6 +2,7 @@ package com.logsystem.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDateTime;
 
 @Document(collection = "logs")
@@ -20,7 +21,6 @@ public class LogEntry {
         this.timestamp = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -44,4 +44,4 @@ public class LogEntry {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-} 
+}

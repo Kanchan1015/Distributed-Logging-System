@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LogEntryRepository extends MongoRepository<LogEntry, String> {
-    // Basic CRUD operations are provided by MongoRepository
-    // We'll add custom queries as needed
-} 
+}
