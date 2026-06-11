@@ -8,6 +8,16 @@ target/
 *.war
 *.ear
 
+# JavaScript / frontend
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
 # Runtime logs and temp files
 *.log
 logs/

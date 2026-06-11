@@ -28,6 +28,7 @@ The current implementation contains:
 - a service layer for validation and persistence
 - API endpoints for creating and reading logs
 - local MongoDB configuration
+- a minimal React + TypeScript UI for demos
 
 The current API stores a simple log entry with:
 
@@ -43,6 +44,9 @@ The current API stores a simple log entry with:
 - Spring Data MongoDB
 - MongoDB
 - Maven
+- React
+- TypeScript
+- Vite
 
 ## How It Works
 
@@ -168,6 +172,13 @@ This separation keeps the code easier to test and extend.
 .
 ├── pom.xml
 ├── README.md
+├── frontend
+│   ├── package.json
+│   ├── index.html
+│   └── src
+│       ├── App.tsx
+│       ├── main.tsx
+│       └── styles.css
 ├── src
 │   └── main
 │       ├── java
@@ -196,6 +207,8 @@ Install:
 - Java 17 or newer
 - Maven 3.9 or newer
 - MongoDB
+- Node.js 20 or newer
+- npm 10 or newer
 
 The application expects MongoDB to run locally on port `27017`.
 
@@ -265,6 +278,26 @@ The API runs at:
 
 ```text
 http://localhost:8081
+```
+
+In a second terminal, install and start the React UI:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The UI runs at:
+
+```text
+http://localhost:5173
+```
+
+By default, the UI calls the backend at `http://localhost:8081`. To point it to another backend URL, set:
+
+```bash
+export VITE_API_BASE_URL=http://localhost:8081
 ```
 
 ## API Endpoints
@@ -356,6 +389,27 @@ Run the app:
 mvn spring-boot:run
 ```
 
+Install frontend dependencies:
+
+```bash
+cd frontend
+npm install
+```
+
+Run the frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Build the frontend:
+
+```bash
+cd frontend
+npm run build
+```
+
 ## Current Limitations
 
 - No authentication or authorization.
@@ -364,7 +418,7 @@ mvn spring-boot:run
 - No explicit MongoDB replica set setup in the repository.
 - No retention or cleanup policy for old logs.
 - No distributed clock synchronization implementation yet.
-- No UI dashboard yet.
+- The UI is intentionally minimal and only supports creating and viewing logs.
 
 ## Possible Future Enhancements
 
@@ -376,6 +430,7 @@ mvn spring-boot:run
 - Add structured log metadata such as service name, host, request ID, or trace ID.
 - Add better error responses for database connectivity failures.
 - Add Docker Compose for local MongoDB setup.
+- Add deployment packaging for serving the React UI with the backend.
 
 ## Repository Hygiene
 
