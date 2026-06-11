@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+
+# Java / Maven build output
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Runtime logs and temp files
+*.log
+logs/
+tmp/
+temp/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+application-local.properties
+application-*.local
+
+# IDEs and editors
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Tool caches
+.gradle/
+.cache/
+
+# Local MongoDB data directories
+data/
+mongodb-data/
