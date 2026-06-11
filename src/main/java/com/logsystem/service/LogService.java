@@ -2,17 +2,27 @@ package com.logsystem.service;
 
 import com.logsystem.model.LogEntry;
 import com.logsystem.repository.LogEntryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class LogService {
     private final LogEntryRepository logEntryRepository;
 
-    @Autowired
     public LogService(LogEntryRepository logEntryRepository) {
         this.logEntryRepository = logEntryRepository;
+    }
+
+    public Optional<LogEntry> createLog(Map<String, String> request) {
+        String message = request == null ? null : request.get("message");
+        if (!hasText(message)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(createLog(message));
     }
 
     public LogEntry createLog(String message) {
@@ -23,4 +33,8 @@ public class LogService {
     public List<LogEntry> getAllLogs() {
         return logEntryRepository.findAll();
     }
-} 
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
+    }
+}

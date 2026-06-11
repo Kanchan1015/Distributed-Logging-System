@@ -8,6 +8,4 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoAuditing
 @EnableMongoRepositories(basePackages = "com.logsystem.repository")
 public class MongoConfig {
-    // Basic MongoDB configuration
-    // We'll add more configuration as needed
-} 
+}
