@@ -36,6 +36,72 @@ The current API stores a simple log entry with:
 - `message`
 - `timestamp`
 
+## Core Functionality
+
+The implemented system has two main workflows: log ingestion and log retrieval.
+
+### Log Ingestion
+
+`POST /api/logs` accepts a JSON request with a `message` field:
+
+```json
+{
+  "message": "Application started successfully"
+}
+```
+
+The backend flow is:
+
+- `LogController.createLog(...)` receives the HTTP request.
+- `LogService.createLog(Map<String, String> request)` extracts and validates the `message`.
+- Blank or missing messages return `400 Bad Request`.
+- Valid messages are converted into a `LogEntry`.
+- `LogEntry` assigns a server-side `timestamp` using `LocalDateTime.now()`.
+- `LogEntryRepository.save(...)` persists the document into the MongoDB `logs` collection.
+
+### Log Retrieval
+
+`GET /api/logs` returns all persisted logs:
+
+- `LogController.getAllLogs()` handles the request.
+- `LogService.getAllLogs()` delegates to the repository.
+- `LogEntryRepository.findAll()` reads all documents from MongoDB.
+- The React UI sorts the returned logs by timestamp newest-first before displaying them.
+
+The API itself currently returns all logs without pagination, filtering, or explicit sort order.
+
+### Demo Test Endpoints
+
+`TestDataController` exposes:
+
+- `POST /api/test/data`
+- `GET /api/test/data`
+
+These endpoints use the same `LogService` logic as `/api/logs`. They are useful for simple testing but do not represent a separate data model or storage path.
+
+## Important Code Responsibilities
+
+| File | Responsibility |
+| --- | --- |
+| `LogSystemApplication.java` | Starts the Spring Boot application. |
+| `LogController.java` | Exposes the primary `/api/logs` REST endpoints. |
+| `TestDataController.java` | Exposes equivalent test/demo endpoints under `/api/test/data`. |
+| `LogService.java` | Contains request validation and persistence orchestration. |
+| `LogEntry.java` | Defines the MongoDB document stored in the `logs` collection. |
+| `LogEntryRepository.java` | Provides MongoDB CRUD access through Spring Data. |
+| `MongoConfig.java` | Enables Mongo repositories and Mongo auditing support. |
+| `frontend/src/App.tsx` | Provides the demo UI for creating, refreshing, sorting, and viewing logs. |
+
+## Design Decisions
+
+- **Centralized receiver:** The Spring Boot API acts as the single log intake point for clients.
+- **Server-side timestamping:** Timestamps are assigned by the backend when a log entry is created, avoiding reliance on client-provided time.
+- **Simple document model:** Logs currently store only `id`, `message`, and `timestamp` so the core ingestion path stays small and easy to reason about.
+- **Service layer validation:** Validation lives in `LogService`, keeping controller methods thin and making the business rule reusable by both production and test endpoints.
+- **MongoDB persistence:** MongoDB stores logs outside the application process, so entries survive application restarts.
+- **Repository abstraction:** Spring Data MongoDB handles the basic persistence operations instead of custom database access code.
+- **Minimal UI boundary:** The React UI is only a demo client. It does not own persistence logic; it calls the REST API and renders the response.
+
 ## Tech Stack
 
 - Java 17
